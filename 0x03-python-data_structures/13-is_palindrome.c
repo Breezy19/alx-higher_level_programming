@@ -1,26 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "lists.h"
+
+/**
+ * reverse_list - reverse singl linked list
+ * @head: head of single linkd list
+ *
+ * Return: new head (tail of old one)
+ */
+listint_t *reverse_list(listint_t **head)
+{
+	listint_t *prev, *curr, *nex;
+
+	prev = NULL;
+	nex = *head;
+	while (nex)
+	{
+		curr = nex;
+		nex = nex->next;
+		curr->next = prev;
+		prev = curr;
+	}
+	return (prev);
+}
+
+/**
+ * is_palindrome - check if linked list is palindrom
+ * @head: linked list
+ *
+ * Return: 0 if not palindrome 1 is palindrome
+ */
 int is_palindrome(listint_t **head)
 {
-	listint_t *current = *head, *palin = *head;
-	int counter = 0, i = 0, j = 0;
-
-	if (!*head)
-		return (1);
+	int len_list = 0, i = 0, len_half, flag = 1;
+	listint_t *current = *head, *other_half, *reversed_half;
 
 	while (current)
 	{
+		len_list++;
 		current = current->next;
-		counter++;
 	}
+	if (len_list <= 1)
+		return (1);
+
+	len_half = len_list / 2;
+	other_half = *head;
+	while (i++ < len_half)
+		other_half = other_half->next;
+	if (len_list % 2)
+		other_half = other_half->next;
+
+	reversed_half = reverse_list(&other_half);
+	other_half = reversed_half;
+
 	current = *head;
-	for (i = 1; i <= counter; i++)
+	i = 0;
+	while (i++ < len_half)
 	{
-		for (j = i; j <= counter - i; j++)
-			palin = palin->next;
-		if (current->n != palin->n)
-			return (0);
+		if (current->n != reversed_half->n)
+		{
+			flag = 0;
+			break;
+		}
 		current = current->next;
-		palin = current;
+		reversed_half = reversed_half->next;
 	}
-	return (1);
+
+	reverse_list(&other_half);
+	return (flag);
 }
