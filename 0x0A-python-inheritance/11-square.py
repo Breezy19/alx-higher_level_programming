@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""more class base
+"""
+more class base
 """
 
 Rectangle = __import__('9-rectangle').Rectangle
